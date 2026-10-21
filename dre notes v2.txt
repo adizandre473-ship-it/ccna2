@@ -1,0 +1,696 @@
+
+8000 
+
+7999 7.255.255.255 7fff
+8001 8.0.0.1 8.0.0.1
+
+5098 5.0.255.254 50fe
+5100 5.1.0.0 5100
+
+
+4908 4.255.0.254 4f0e
+4909
+4910 4.255.1.0 4f10
+
+
+
+
+CT
+
+conf t
+ip routing
+int fa0/9
+no sw
+no shut
+ip address 10.182.45.60 255.255.255.224
+end
+
+CB
+
+conf t
+ip routing
+int fa0/9
+no sw
+no shut
+ip address 10.182.45.65 255.255.255.224
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+activity
+
+1.)
+172.28.228.144/18
+
+255.255.192.0
+
+3rd, 64i
+
+128
+
+255.255.
+
+
+172.28.245.0
+
+2.)
+172.28.228.144/21
+
+255.255.248.0
+
+3rd, 8i
+
+128
+8x18=144
+255.255.
+
+
+172.28.245.0
+
+
+2.)
+172.28.228.144/21
+
+255.255.248.0
+
+3rd, 8i
+
+128
+8x18=144
+255.255.
+
+
+172.28.245.0
+
+
+vlsm - more than one subnet
+
+fianance
+- 10.0.0.0/16
+- 87 users
+- 7bits, 32 - 7 = /25
+
+255.255.255.128
+4th, 128i
+I=10.0.0.0/25
+
+NOT:
+
+10.0.0.1 - 10.0.0
+
+
+
+
+5 bits = 16i
+240
+
+/27
+
+255.255.255.224
+
+4th, 32i
+10.0.0.0/27
+
+
+10.0.0.160
+
+4 bits
+
+/28
+
+255.255.255.240
+4th, 16i
+
+10.0.0.160 N
+10.0.0.161 first Usable
+10.0.0.161 to 10.0.0.174
+10.0.0.175 Broad
+10.0.0.176 NOT
+
+
+
+
+
+
+
+
+
+finance
+
+config t
+vlan 21
+ name FINANCE
+ exit
+Int vlan 21
+ no shut
+ ip add 10.22.0.1 255.255.255.128
+ ip ospf 1 area 0
+ip dhcp excluded-add 10.22.0.1 10.2.0.100
+ip dhcp pool FINANCE.com
+ network 10.22.0.0 255.255.255.128
+ default-router 10.22.0.1
+domain-name FINANCE.com
+ dns-server 10.22.1.10
+ option 150 ip 10.22.100.8
+ Int Fa 0/7
+  swi Voice vlan 21
+  do sh ip dhcp binding
+
+
+
+config t
+vlan 22
+ name FINANCE
+ exit
+Int vlan 22
+ no shut
+ ip add 10.22.0.129 255.255.255.224
+ ip ospf 1 area 0
+ip dhcp excluded-add 10.22.0.129 10.22.0.139
+ip dhcp pool ADMIN.com
+ network 10.22.0.128 255.255.255.224
+ default-router 10.22.0.129
+domain-name ADMIN.com
+ dns-server 10.22.1.10
+ option 150 ip 10.22.100.8
+ Int Fa 0/5
+  swi Voice vlan 22
+  do sh ip dhcp binding
+
+
+
+189 users
+8 bits - 128
+32-8= /24
+255.255.255.0
+3rd, 1i
+
+N:192.168.129.0/24
+F:192.168.129.0/24
+B:192.168.129.255/18
+NOT:192.168.130.0/18 
+
+
+
+C1
+
+config t
+vlan 40
+ name ACCENTURE
+ exit
+Int vlan 40
+ no shut
+ ip add 192.168.129.1 255.255.255.0
+ ip ospf 1 area 0
+ip dhcp excluded-add 192.168.129.1 192.168.129.20
+ip dhcp pool ACCENTURE.com
+ network 192.168.129.0 255.255.255.0
+ default-router 192.168.129.1
+domain-name ACCENTURE.com
+ dns-server 10.22.1.10
+end
+
+
+P1
+
+conf t
+int e0/0
+no shut
+ip address dhcp 
+end
+sh ip int br
+
+
+A1
+
+conf t
+int e0/0
+switchport mode access
+switchport access vlan 40
+end
+
+
+
+
+-------------------------------------------
+
+2800 users
+12 bits - 2048
+32-12= /20
+255.255.240.0
+3rd, 16i
+
+N:172.16.48.0/20
+F:172.16.49.1/20
+B:172.16.63.255/20
+NOT:172.16.64.0/20 
+
+
+
+C2
+
+config t
+vlan 50
+ name CONCENTRIX
+ exit
+Int vlan 50
+ no shut
+ ip add 172.16.49.1 255.255.240.0
+ ip ospf 1 area 0
+ip dhcp excluded-add 172.16.49.1 172.16.49.100
+ip dhcp pool CONCENTRIX.com
+ network 172.16.49.0 255.255.240.0
+ default-router 172.16.49.1
+domain-name CONCENTRIX.com
+ dns-server 10.22.1.10
+end
+
+
+P2
+
+conf t
+int e1/0
+no shut
+ip address dhcp 
+end
+sh ip int br
+
+
+A2
+
+conf t
+int e1/0
+switchport mode access
+switchport access vlan 50
+end
+
+
+
+-----------
+
+Static routing
+
+
+[DESTINATION] [MASK] [NEXT/HOP/EXIT INTERFACE] 
+
+R1
+
+conf t
+ip route 10.1.1.5 255.255.255.255 10.1.1.2
+end 
+ping 10.1.1.5
+
+
+conf t
+ip route 2.2.2.2 255.255.255.255 10.1.1.2
+end 
+ping 2.2.2.2
+
+
+NETWORK
+conf t
+ip route 10.1.1.4 255.255.255.252 10.1.1.2
+end 
+ping 10.1.1.6
+
+
+for R3
+conf t
+ip route 10.1.1.0 255.255.255.252 10.1.1.5
+end 
+ping 10.1.1.1
+
+ip route [network ip]
+
+R1 and R4
+
+
+R1
+conf t
+ip route 10.1.1.8 255.255.255.252 10.1.1.2
+end 
+ping 10.1.1.10
+
+R4
+conf t
+ip route 10.1.1.0 255.255.255.252 10.1.1.9
+end 
+ping 10.1.1.1
+
+
+R2
+conf t
+ip route 10.1.1.8 255.255.255.252 10.1.1.6
+end 
+ping 10.1.1.1
+
+
+
+
+
+
+
+
+/18  255.255.192.0   3rd, 64i   0.0.63.255
+/27  255.255.255.224 4th, 32i   0.0.0.31
+/14  255.252.0.0     2nd, 4i    0.3.255.255
+/28  255.255.255.240 4th, 16i    0.0.0.15
+
+Bit length
+42 - 6
+1800 - 11
+365 - 9
+980 - 10
+112 - 7
+
+
+
+
+
+
+
+cd desktop
+dir
+cd andre
+git clone --branch ccna https://github.com/4rthurcyber08/rivan_day3
+
+
+RIB/ routing table
+
+route print / netstat -r
+
+
+
+
+
+
+For A2
+
+C2 pri
+conf t
+ ip route 0.0.0.0 0.0.0.0 192.168.1.130 1
+ ip route 0.0.0.0 0.0.0.0 192.168.1.129 10
+ end
+
+C1 sec
+conf t
+ ip route 0.0.0.0 0.0.0.0 192.168.1.129 1
+ ip route 0.0.0.0 0.0.0.0 192.168.1.130 10
+ end
+
+
+P2 rekta kay C1
+conf t
+ ip route 192.168.1.128 255.255.255.224 10.2.1.2
+ ip route 192.168.1.129 255.255.255.255 10.2.1.1
+ end
+
+
+
+EIGRP
+-know what to advertise, or connected networks
+
+
+C1
+conf t
+router eigrp 100 
+network 10.2.1.0 0.0.0.255
+network 10.2.2.0 0.0.0.255
+network 192.168.1.128 0.0.0.31
+network 10.1.4.4 0.0.0.3
+end
+
+C2
+conf t
+router eigrp 100 
+network 10.2.1.0 0.0.0.255
+network 10.2.2.0 0.0.0.255
+network 192.168.1.128 0.0.0.31
+network 10.1.4.8 0.0.0.3
+end
+
+
+eigrp routers - 224.0.0.10 (multicast address niya)
+
+
+interior gateway protocol
+-distance vector
+ eigrp
+ rip
+-link state
+ ospf
+ is-is
+
+exterior gateway protocol (sa mga internet)
+ -path vector
+ -bgp
+
+5 types of hello messages of eigrp
+ - hello - keep alive - determine if a neighbour exist
+ - query
+ - updates
+ - reply
+ - hello (ack)
+
+
+
+unequal cost load balancing
+R4
+conf t 
+router eigrp 100
+variance 10
+ end
+
+
+
+
+OSPF FOR R2
+conf t
+ router ospf 1
+  router-id 2.2.2.2
+  network 2.2.2.2 0.0.0.0 area 0
+  network 10.1.1.4 0.0.0.3 area 0
+  network 10.1.1.0 0.0.0.3 area 12
+  end
+
+
+
+Neigh vs Adj
+
+para goods
+-router id, dapat unique
+-same area
+-within subnet mask or prefix
+-network type
+-same timer
+-authentication
+
+
+Configure authentication
+
+conf t 
+key chain CCNA
+key 1
+key-string pass
+crypto md5
+!
+int e1/2
+ip ospf authentication key CCNA
+end
+
+
+
+seed metrics for redistribution (walang sinet na metric values)
+eigrp -infinity
+rip - infiinity
+ospf - 20 cost
+isis - 0
+bgp - based on the igbp
+
+
+lowest admin distance to highest, lumalabas sa exam
+
+C=0 coonected
+S=1 static
+O=110 ospf
+D=90 eigrp
+D=170 ex
+R=120
+L1=115 ISIS
+
+
+IMPORTANT:
+longest prefix
+admin distance
+metrics
+
+
+ref BW/ int BW
+
+taasan lagi referenve BW
+
+
+
+corebaba
+
+conf t
+int lo10
+ip add 192.168.22.22 255.255.255.255
+ip ospf 1 area 22
+end
+
+conf t
+router eigrp 100
+no network 192.168.0.0 0.0.255.255
+network 192.168.22.0 0.0.0.255
+router ospf 1
+redistribute eigrp 100 subnets metric 2
+end
+
+
+
+important and designated router
+- kinakausap ng lahat na routers or manager
+
+Link state database
+
+types of LSA important
+
+type 1 router information
+type 2 mga advertisement?
+type 3 from different area
+
+type 5 from other system
+type 4 airport, kasama ng 5
+
+
+---------------
+BGP no hello packets
+tcp based connection
+
+default GW injection
+
+
+icmp echo request
+
+
+static nat for c1 and c2
+conf t
+ ip nat inside source static 10.1.4.6 208.8.8.100 
+ ip nat inside source static 10.1.4.10 208.7.7.100
+ end
+show ip nat translations
+
+
+
+
+conf t
+ ip route 0.0.0.0 0.0.0.0 207.7.7.202 11
+ ip route 0.0.0.0 0.0.0.0 207.7.7.202 22
+ ip route 0.0.0.0 0.0.0.0 192.168.1.133 33
+ip route 0.0.0.0 0.0.0.0  10.2.2.133 44
+ router ospf 1
+  default-information originate
+  end
+
+
+
+
+conf t
+ ip nat inside source static 10.2.1.101 207.7.7.201 
+ ip nat inside source static 10.2.1.102 207.7.7.202
+ ip nat inside source static 192.168.1.133 209.9.9.201
+ ip nat inside source static 10.2.2.133 209.9.9.202
+ end
+
+
+
+Users, computers, pc, hosts
+-CSI
+
+Officees, department, rooms, subnets
+-CAI
+
+Design 4 offices using the address space of 10.1.2.0/28
+- maximize the number of hosts
+
+C convert 4 offices = 2 bits
+A add /28 +2 = /30
+I ipasok si i sa octet many times
+1st office 10.1.2.0/30
+3nf office 10.1.2.4/30
+
+
+
+==========================
+CAI
+
+design 8 offices using address space of 10.1.3.192/26
+
+C : 8 offices = 3 bits
+A : /26 +3 = /29   (4th, 8i)
+I : 
+10.1.3.192/26
+10.1.3.200/26
+10.1.3.208/26
+10.1.3.216/26
+10.1.3.224/26
+10.1.3.232/26
+10.1.3.240/26
+10.1.3.248/26 
+
+----------
+64 new sites
+10.30.64.0/19 maximize using the third subnet
+
+C - 64 = 6 bits
+A - /19 + 6 = /25 (4th, 128i)
+I - 
+10.30.64.0/25
+10.30.64.128/25
+10.30.65.0/25
+
+Sw 101
+conf t
+int e0/0
+no switchport
+no shut
+io address 10.30.64.1 255.255.255.128
+
+Sw 102
+conf t
+int e0/0
+no switchport
+no shut
+io address 10.30.65.126 255.255.255.128
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
