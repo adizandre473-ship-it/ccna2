@@ -1,0 +1,223 @@
+dont forget to wr
+
+CMD
+cd desktop
+cd andre
+git clone https://github.com/4rthurcyber08/rivan_day4
+
+
+may mga label or extra na MTU sa mga mpls para mabilis, wala na mga encapsulation and other processes, for example sa gcash para di na mabagal yung mga pagsesend ng pera or something
+
+
+
+Attack 445
+
+net use \\10.92.1.10\ipc$
+
+
+net use x: \\10.92.1.10\c$ 
+
+
+Phones
+1. PoE
+2. MAC
+3. IP
+4. TFTP _UDP 69, SCCP _TCP 2000, SIP _TCP 5060
+5. RTP 
+
+
+
+
+Pinging pornhub.com 66.254.114.41 
+Pinging redtube.com 66.254.114.238 
+Pinging faketaxi.com 66.254.114.234
+Pinging bangbros.com 66.254.114.234 
+Pinging pinayflix.com 172.67.146.93 
+Pinging sulasok.tv 172.67.159.23
+Pinging iyottube.com 208.77.20.35 
+
+
+Pinging cisco.com [72.163.4.185] with 32 bytes of data:
+
+
+
+Configure a standard ACL named NOPORN to protect your brain
+
+
+UTM PH
+
+conf t
+no ip access-list standard NOPORN
+ip access-list standard NOPORN
+deny 66.254.114.0 0.0.0.255
+deny 104.21.0.0 0.0.255.255
+deny host 208.77.20.35
+permit any
+!
+int g1
+ip access-group NOPORN in
+end
+
+BALIK PORN
+conf t
+int g1
+no ip access-group NOPORN in
+end
+
+LUNCH ACTIVITY
+Block school
+
+www.dlsu.edu.ph
+www.ccp.edu.ph
+www.feu.edu.ph
+www.ue.edu.ph
+ 
+www.dlsu.edu.ph 104.20.42.168
+ccp.edu.ph 50.6.160.47
+www.feu.edu.ph 184.168.125.216
+www.ue.edu.ph 155.137.92.102
+
+conf t
+no ip access-list standard NOSCHOOL
+ip access-list standard NOSCHOOL
+deny host 104.20.42.168
+deny host 50.6.160.47
+deny host 184.168.125.216
+deny host 155.137.92.102
+permit any
+!
+int g1
+ip access-group NOSCHOOL in
+end
+
+
+208.8.8.100 www.bet100.com
+208.8.8.100 bet100.com
+
+
+
+
+!@UTM-PH
+conf t
+ no ip access-list extended FWP4
+ ip access-list extended FWP4
+ permit tcp Any host www.bet100.com eq 80 log
+ permit tcp Any host www.bet100.com eq 443 log
+ permit icmp Any host www.bet100.com log
+ permit tcp Any host www.bet100.com eq 22 log
+ permit tcp Any host www.bet100.com eq 53 log
+ Int gi 1
+  ip access-group FWP4 in
+  end
+
+
+
+conf t
+ no ip access-list extended FWP5
+ ip access-list extended FWP5
+  permit tcp Any host www.bet100.com eq 23 log
+  permit tcp Any host www.bet100.com eq 3306 log
+  permit tcp Any host www.bet100.com eq 21 log
+  permit tcp Any host www.bet100.com eq 53 log
+  permit icmp Any host www.bet100.com log
+  exit
+ int gi 1
+  ip access-group FWP5 in
+  end
+
+
+
+### Remember Ports
+Create an access-list named FWP6 to open the following ports:  
+www.bet100.com open only sccp, sip, imap, smtp, pop3, ftp, tftp, ntp
+                         2000  5060  143   25   110    21   69   123
+~~~
+!@UTM-PH
+conf t
+ no ip access-list extended FWP6
+ ip access-list extended FWP6
+permit tcp Any host www.bet100.com eq 2000 log
+permit tcp Any host www.bet100.com eq 5060 log
+permit tcp Any host www.bet100.com eq 143 log
+permit tcp Any host www.bet100.com eq 25 log
+permit tcp Any host www.bet100.com eq 110 log
+permit tcp Any host www.bet100.com eq 21 log
+permit udp Any host www.bet100.com eq 69 log
+permit udp Any host www.bet100.com eq 123 log
+
+ Int gi 1
+  ip access-group FWP6 in
+  end
+
+
+tcp -nmap -v
+udp -nmap -sU --min-rate 2000
+
+
+
+!@BLDG-PH
+sudo su
+hostname BLDG-PH
+ifconfig eth0 10.11.11.101 netmask 255.255.255.224 up
+route add default gw 10.11.11.113
+ping 10.11.11.113
+
+
+!@BLDG-JP-1
+sudo su
+hostname BLDG-JP-1
+ifconfig eth0 10.21.21.211 netmask 255.255.255.240 up
+route add default gw 10.21.21.213
+ping 10.21.21.213
+
+
+
+
+Cipher text
+Public key
+
+-------------
+SECURE CONNECTION
+
+!UTM PH
+conf t 
+hostname UTM-PH-SECURE
+ip domain name ccna.key
+crypto key generate rsa modulus 2048 label key
+!
+ip ssh version 2
+line vty 0 14
+transport input all
+login local 
+username admin privilege 15 secret pass
+end
+
+
+public and private key
+
+
+PROOF INTEGRITY
+PROOF ORIGIN
+
+NON REPUDIATION
+
+
+
+192.168.102.11 ph
+192.168.102.12 jap
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
